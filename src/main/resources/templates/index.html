@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<p>やられたらやり返す。</p>
+	<img src="/images/naoki.png" />
+	<p><span th:text="${x}"></span>倍返しだ！</p>
+	<form th:action="@{/index}" th:object="${baiForm}" method="post">
+		<input type="text" name="num" placeholder="整数値を入力" required="required" pattern="\d+" th:value="*{num}"></input>
+		倍で
+		<input type="submit" value="やり返す" />
+	</form>
+</body>
+</html>

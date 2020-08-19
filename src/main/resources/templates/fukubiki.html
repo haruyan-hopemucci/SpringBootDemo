@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>フクビキレンキン - DQ2SP</title>
+</head>
+<body>
+
+<h1>フクビキレンキン - DQ2SP</h1>
+
+<div id="description" th:if="!${result}">
+<h2>説明</h2>
+<p>スマホ版ドラゴンクエストⅡにおいて、ふくきびけんを利用した所持金増殖方法を提示します。
+<p>やくそう、どくけしそう、キメラのつばさが売っている道具屋で行うことを想定しています。
+<p>現在の所持金を入力すると、道具屋での売買指示が表示されます。表示された通りの売り買いを行うと最終的に所持金が増えます。
+
+<h2>下準備</h2>
+<ul>
+	<li>先頭キャラクターのアイテム欄を「やくそう」1つにしてください。
+</ul>
+
+</div>
+
+<div id="operations" th:if="${result}" >
+<table th:if="${result}" border="1">
+	<thead>
+		<tr>
+			<th>売買</th>
+			<th>アイテム</th>
+			<th>所持金</th>
+			<th>アイテム欄</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr th:each="item:${operations}">
+			<td th:text="${item.operation}">
+			<td th:text="${item.itemName}">
+			<td th:text="${item.gold}">
+			<td th:each="inv:${item.itemList}" th:text="${inv}">
+		</tr>
+	</tbody>
+</table>
+</div>
+
+<form th:action="@{/fukubiki_result}" th:object="${fukubikiForm}" method="post">
+	<label for="gold">現在の所持金</label>
+	<input type="text" name="gold" id="gold" placeholder="現在の所持金" pattern="^[0-9]{1,5}$"
+		title="5桁までの数値を入力してください。" th:value="*{gold}"/> ゴールド
+	<input type="submit" value="実行" />
+</form>
+
+</body>
+</html>

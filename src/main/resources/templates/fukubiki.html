@@ -1,39 +1,62 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>フクビキレンキン - DQ2SP</title>
+
+<!-- controller側でstyleをtrueにするとbootstrap有効 -->
+<th:block th:if="${style} == true">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" th:href="@{css/fukubiki-style.css}" />
+
+</th:block>
+
 </head>
 <body>
 
-<h1>フクビキレンキン - DQ2SP</h1>
+<div class="jumbotron">
+<div class="container-fluid">
+	<h1 class="display-4">フクビキレンキン - DQ2SP</h1>
+	<div class="lead">＊「かんしゃのきもちをこめて　ふくびきけんをおまけしておきますね。」</div>
+	<hr class="my-4">
+	<div id="description" th:if="!${result}" class="pb-1">
+		<h2>説明</h2>
+		<p>スマホ版ドラゴンクエストⅡにおいて、ふくきびけんを利用した所持金増殖方法を提示します。
+		<p>やくそう、どくけしそう、キメラのつばさが売っている道具屋で行うことを想定しています。
+		<p>現在の所持金を入力すると、道具屋での売買指示が表示されます。表示された通りの売り買いを行うと最終的に所持金が増えます。
 
-<div id="description" th:if="!${result}">
-<h2>説明</h2>
-<p>スマホ版ドラゴンクエストⅡにおいて、ふくきびけんを利用した所持金増殖方法を提示します。
-<p>やくそう、どくけしそう、キメラのつばさが売っている道具屋で行うことを想定しています。
-<p>現在の所持金を入力すると、道具屋での売買指示が表示されます。表示された通りの売り買いを行うと最終的に所持金が増えます。
-
-<h2>下準備</h2>
-<ul>
-	<li>先頭キャラクターのアイテム欄を「やくそう」1つにしてください。
-</ul>
-
+		<h2>実行方法</h2>
+		<ol>
+			<li>先頭キャラクターのアイテム欄を「やくそう」1つにしてください。
+			<li>所持金欄に現在の所持金を入力し、実行ボタンを押してください。
+			<li>道具屋での売り買い指示が表で出力されます。表通りに買い物をしてください。
+			<li>最終的にアイテム欄は「やくそう」1つに戻ります。
+			<li>そのまま実行ボタンを押すと繰り返し実行できます。
+		</ol>
+	</div>
+</div>
 </div>
 
-<div id="operations" th:if="${result}" >
-<table th:if="${result}" border="1">
+
+<div id="operations" class="container-fluid" th:if="${result}" >
+<div class="table-responsive-sm">
+<table class="table table-dark" th:if="${result}" border="1">
 	<thead>
 		<tr>
 			<th>売買</th>
 			<th>アイテム</th>
 			<th>所持金</th>
-			<th>アイテム欄</th>
+			<th colspan="10">アイテム欄</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr th:each="item:${operations}">
-			<td th:text="${item.operation}">
+		<tr class="text-nowrap" th:each="item:${operations}">
+			<td class="text-nowrap" th:text="${item.operation}">
 			<td th:text="${item.itemName}">
 			<td th:text="${item.gold}">
 			<td th:each="inv:${item.itemList}" th:text="${inv}">
@@ -41,13 +64,17 @@
 	</tbody>
 </table>
 </div>
+</div>
 
+<div class="container">
 <form th:action="@{/fukubiki_result}" th:object="${fukubikiForm}" method="post">
 	<label for="gold">現在の所持金</label>
-	<input type="text" name="gold" id="gold" placeholder="現在の所持金" pattern="^[0-9]{1,5}$"
+	<input class="form-control-inline form-control-lg" type="text" name="gold" id="gold" placeholder="現在の所持金" pattern="^[0-9]{1,5}$"
 		title="5桁までの数値を入力してください。" th:value="*{gold}"/> ゴールド
-	<input type="submit" value="実行" />
+	<input class="btn btn-primary btn-lg" type="submit" value="実行" />
 </form>
+</div>
+
 
 </body>
 </html>

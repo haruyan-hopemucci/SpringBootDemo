@@ -15,21 +15,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class FukibukiController {
 
+	/* 使うアイテムをstaticフィールド変数に保存しておく。タイプ量削減が目的 */
 	static FukubikiItem YAK = FukubikiItem.YAK;
 	static FukubikiItem DOK = FukubikiItem.DOK;
 	static FukubikiItem KIM = FukubikiItem.KIM;
 	static FukubikiItem FUK = FukubikiItem.FUK;
 
+	/**
+	 * 画面で使用するフォームオブジェクト
+	 * "@ModelAttribute"を付与すると、コントローラのメソッドが呼び出される前にこのメソッドが実行され、
+	 * return したオブジェクトがページのリクエストスコープに保存される。
+	 * フォームの入力データがある場合、ここで作成されたオブジェクトにフォームデータがコピーされる。
+	 * @return
+	 */
 	@ModelAttribute
 	FukubikiForm setupFukubikiform() {
-		return new FukubikiForm();
+		FukubikiForm form = new FukubikiForm();
+		// 例えば初期値を入れたい場合にこの仕組みを使う
+		form.setGold(75);
+		return form;
 	}
 
+	@ModelAttribute(name = "style")
+	boolean setupStyle() {
+		return true;
+	}
+
+	/**
+	 * ふくびき錬金トップページコントローラ
+	 * @param form
+	 * @param m
+	 * @return
+	 */
 	@RequestMapping("/fukubiki")
 	public String fukubiki(FukubikiForm form, Model m) {
 		return "fukubiki";
 	}
 
+	/**
+	 * ふくびきれんきん結果ページコントローラ
+	 * @param form
+	 * @param m
+	 * @return
+	 */
 	@RequestMapping("/fukubiki_result")
 	public String fukubikiResult(FukubikiForm form, Model m) {
 		FukubikiOperation ope = new FukubikiOperation();
